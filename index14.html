@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A&B - Plataforma Geek (Prototipo UI)</title>
+  <link rel="stylesheet" href="style14.css">
+</head>
+<body>
+
+  <!-- NAVEGACIÓN PRINCIPAL CON TOGGLE DE MODO OSCURO -->
+  <header class="navbar">
+    <div class="logo-container">
+      <span class="logo-badge">A&B</span>
+      <h1 class="logo-title">Anime & Videojuegos</h1>
+    </div>
+    
+    <div class="nav-controls">
+      <!-- Botón de Modo Oscuro / Claro -->
+      <button id="theme-toggle" class="btn-theme" onclick="toggleTheme()" title="Cambiar Tema">
+        <span id="theme-icon">🌙</span>
+      </button>
+
+      <nav class="nav-links">
+        <button class="nav-btn active" onclick="mostrarPantalla('login-screen')">Iniciar Sesión</button>
+        <button class="nav-btn" onclick="mostrarPantalla('register-screen')">Registrarse</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="main-container">
+
+    <!-- PANTALLA 1: LOGIN (VALIDACIÓN DE AUTENTICIDAD) -->
+    <section id="login-screen" class="card-screen active">
+      <div class="card-header">
+        <h2>Bienvenido a A&B</h2>
+        <p class="subtitle">Ingresa tus credenciales para acceder a la comunidad geek</p>
+      </div>
+
+      <form id="login-form" class="form-grid" onsubmit="procesarLogin(event)">
+        <div class="form-group">
+          <label for="login-email">Correo Electrónico / Usuario</label>
+          <input type="email" id="login-email" placeholder="ejemplo@animevideojuegos.com" required>
+        </div>
+
+        <div class="form-group">
+          <label for="login-password">Contraseña</label>
+          <div class="password-wrapper">
+            <input type="password" id="login-password" placeholder="••••••••" required>
+            <button type="button" class="btn-toggle-pwd" onclick="togglePassword('login-password')">👁️</button>
+          </div>
+        </div>
+
+        <div class="form-actions-inline">
+          <a href="#" class="link-secondary" onclick="simularError('Olvidó Contraseña')">¿Olvidaste tu contraseña?</a>
+        </div>
+
+        <button type="submit" class="btn-primary">Iniciar Sesión</button>
+
+        <p class="footer-text">
+          ¿No tienes una cuenta? 
+          <a href="#" class="link-primary" onclick="mostrarPantalla('register-screen')">Regístrate aquí</a>
+        </p>
+      </form>
+    </section>
+
+    <!-- PANTALLA 2: REGISTRO DE DATOS PERSONALES Y CONTRASEÑA -->
+    <section id="register-screen" class="card-screen">
+      <div class="card-header">
+        <h2>Registro de Usuario</h2>
+        <p class="subtitle">Completa tus datos personales y credenciales para crear tu perfil en A&B</p>
+      </div>
+
+      <form id="register-form" class="form-grid-2col" onsubmit="procesarRegistro(event)">
+        <div class="form-group">
+          <label for="reg-nombres">Nombres *</label>
+          <input type="text" id="reg-nombres" placeholder="Ej. Cristian Camilo" required>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-apellidos">Apellidos *</label>
+          <input type="text" id="reg-apellidos" placeholder="Ej. Serrano" required>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-cedula">Cédula / Identificación *</label>
+          <input type="text" id="reg-cedula" placeholder="Ej. 1012345678" pattern="[0-9]+" required>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-nacimiento">Fecha de Nacimiento *</label>
+          <input type="date" id="reg-nacimiento" required>
+        </div>
+
+        <div class="form-group full-width">
+          <label for="reg-email">Correo Electrónico *</label>
+          <input type="email" id="reg-email" placeholder="usuario@correo.com" required>
+        </div>
+
+        <!-- CAMPOS AGREGADOS: CREACIÓN Y CONFIRMACIÓN DE CONTRASEÑA -->
+        <div class="form-group">
+          <label for="reg-password">Crear Contraseña *</label>
+          <div class="password-wrapper">
+            <input type="password" id="reg-password" placeholder="••••••••" minlength="6" required>
+            <button type="button" class="btn-toggle-pwd" onclick="togglePassword('reg-password')">👁️</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-confirm-password">Confirmar Contraseña *</label>
+          <div class="password-wrapper">
+            <input type="password" id="reg-confirm-password" placeholder="••••••••" minlength="6" required>
+            <button type="button" class="btn-toggle-pwd" onclick="togglePassword('reg-confirm-password')">👁️</button>
+          </div>
+        </div>
+
+        <div class="form-group full-width checkbox-group">
+          <input type="checkbox" id="reg-terms" required>
+          <label for="reg-terms">Acepto los Términos, Condiciones y Política de Tratamiento de Datos de A&B.</label>
+        </div>
+
+        <div class="form-buttons full-width">
+          <button type="button" class="btn-secondary" onclick="mostrarPantalla('login-screen')">Cancelar</button>
+          <button type="submit" class="btn-primary">Guardar y Crear Cuenta</button>
+        </div>
+      </form>
+    </section>
+
+  </main>
+
+  <!-- PANTALLA 3: MODAL DE GESTIÓN DE ERRORES -->
+  <div id="error-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-icon-container">
+        <span class="error-icon">⚠️</span>
+      </div>
+      <h3 id="modal-title">Error en la Solicitud</h3>
+      <p id="modal-message">Las credenciales ingresadas no corresponden a ningún usuario registrado en A&B. Por favor verifica tus datos e intenta nuevamente.</p>
+      
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="cerrarModal()">Contactar a Soporte</button>
+        <button class="btn-danger" onclick="cerrarModal()">Reintentar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
